@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block nav %}
+
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:index' %}">トップ</a>
+  </li>
+</ul>
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:login' %}">ログイン</span></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:signup' %}">新規登録</a>
+  </li>
+</ul>
+{% endblock %}

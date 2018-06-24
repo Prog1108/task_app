@@ -1,0 +1,13 @@
+
+{% extends 'accounts/account_base.html' %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <fieldset>
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="登録" />
+  </fieldset>
+</form>
+
+{% endblock %}

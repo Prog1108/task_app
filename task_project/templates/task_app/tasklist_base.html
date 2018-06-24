@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block nav %}
+<ul class="navbar-nav mr-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'task_app:index' %}">タスクリスト</a>
+  </li>
+</ul>
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:logout' %}">ログアウト</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#">
+        {{ user }}
+    </a>
+  </li>
+</ul>
+{% endblock %}
+
+{% block script %}
+
+<!-- Vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<!-- axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<!-- Cookie -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"></script>
+
+<!-- my script -->
+<script src="{% static 'js/script.js' %}"></script>
+
+{% endblock %}
