@@ -9,7 +9,7 @@ class TaskItem(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=150)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
@@ -26,7 +26,7 @@ class TaskItemDone(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=150)
     author = models.ForeignKey(
         'auth.user',
         on_delete=models.CASCADE,

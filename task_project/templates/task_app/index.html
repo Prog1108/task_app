@@ -32,7 +32,12 @@
 
     <!-- task done -->
     <div class="col-xs-12 col-md-6 col-lg-6">
-      <h3>完了済み</h3>
+      <form v-on:submit.prevent="deleteAllDoneItem()">
+        <h3>完了済み
+        <button class="btn btn-danger">全て削除</button>
+        </h3>
+      </form>
+
       <ul class="list-group" v-for="doneItem in doneItems">
         <li class="list-group-item">
           <form v-on:submit.prevent="addNewItem(doneItem.text)">

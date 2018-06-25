@@ -94,6 +94,11 @@ var vm = new Vue({
         .catch((err) => {
           console.log(err);
         })
+    },
+    deleteAllDoneItem: function() {
+      for(var i = 0; i < this.doneItems.length; i++) {
+        this.deleteDoneItem(this.doneItems[i].task_id);
+      }
     }
   }
 });
