@@ -1,14 +1,17 @@
 
-const csrfToken = Cookies.get('csrftoken')
+const csrfToken = Cookies.get('csrftoken');
 const requestHeader = {
   headers: {
     'X-CSRFToken': csrfToken
   }
-}
+};
 
-// いらない
-// axios.defaults.headers['X-CSRFToken'] = requestHeader.headers['X-CSRFToken'];
+/*
+  APIリクエスト処理
 
+  リクエストは、GET,POST,DELETE
+  アクセスするAPIはTaskItem, TaskItemDone
+*/
 var vm = new Vue({
   el: '#tasklist',
   delimiters: ['${', '}'],
@@ -99,6 +102,7 @@ var vm = new Vue({
       for(var i = 0; i < this.doneItems.length; i++) {
         this.deleteDoneItem(this.doneItems[i].task_id);
       }
-    }
+      $('#deleteAllModal').modal('hide');
+    },
   }
 });
