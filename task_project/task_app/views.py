@@ -3,8 +3,8 @@ from rest_framework import viewsets
 
 from django.views import generic
 
-from task_app.models import TaskItem
-from task_app.serializers import TaskItemSerializer
+from task_app.models import TaskItem, TaskItemDone
+from task_app.serializers import TaskItemSerializer, TaskItemDoneSerializer
 
 
 class TaskListView(LoginRequiredMixin, generic.TemplateView):
@@ -19,5 +19,15 @@ class TaskItemViewSet(viewsets.ModelViewSet):
         return TaskItem.objects.filter(author=self.request.user)
 
     def perform_create(self, serializer):
-        print('called from HTTP POST')
+        return serializer.save(author=self.request.user)
+
+
+class TaskItemDoneViewSet(viewsets.ModelViewSet):
+    queryset = TaskItemDone.objects.all()
+    serializer_class = TaskItemDoneSerializer
+
+    def get_queryset(self):
+        return TaskItemDone.objects.filter(author=self.request.user)
+
+    def perform_create(self, serializer):
         return serializer.save(author=self.request.user)

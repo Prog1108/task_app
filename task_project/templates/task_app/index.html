@@ -18,24 +18,27 @@
     <!-- task -->
     <div class="col-xs-12 col-md-6 col-lg-6">
       <h3>未完了</h3>
-      <ul class="list-group" v-for="item in items">
-        <li class="list-group-item">
-          <button class="btn btn-default" v-on:click="deleteItem(item.task_id)">○</button>
-          ${ item.text }
-        </li>
-      </ul>
+      <div class="list">
+        <ul class="list-group" v-for="item in items">
+          <li class="list-group-item">
+            <form v-on:submit.prevent="addDoneItem(item.text)">
+              <button class="btn btn-sm btn-outline-danger" v-on:click="deleteItem(item.task_id)">－</button>
+              ${ item.text }
+            </form>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <!-- task done -->
     <div class="col-xs-12 col-md-6 col-lg-6">
       <h3>完了済み</h3>
-      <ul class="list-group" v-for="done_item in done_items">
+      <ul class="list-group" v-for="doneItem in doneItems">
         <li class="list-group-item">
-          <form v-on:submit.prevent="addItem()">
-            <input type="hidden" value="done_item.text">
-            <button type="submit" class="form-control" v-model="newItem.text">戻す</button>
+          <form v-on:submit.prevent="addNewItem(doneItem.text)">
+            <button class="btn btn-sm btn-outline-primary" v-on:click="deleteDoneItem(doneItem.task_id)">＋</button>
+            ${ doneItem.text }
           </form>
-          ${ done_item.text }
         </li>
       </ul>
     </div>

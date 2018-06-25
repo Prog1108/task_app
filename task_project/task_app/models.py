@@ -17,4 +17,21 @@ class TaskItem(models.Model):
     )
 
     def __str__(self):
-        return str(self.text)
+        return self.text
+
+
+class TaskItemDone(models.Model):
+    task_id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
+    text = models.CharField(max_length=50)
+    author = models.ForeignKey(
+        'auth.user',
+        on_delete=models.CASCADE,
+        null=True
+    )
+
+    def __str__(self):
+        return self.text
