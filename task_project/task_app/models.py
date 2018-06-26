@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 
 
 class TaskItem(models.Model):
@@ -15,23 +16,8 @@ class TaskItem(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
-
-    def __str__(self):
-        return self.text
-
-
-class TaskItemDone(models.Model):
-    task_id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
-    text = models.CharField(max_length=150)
-    author = models.ForeignKey(
-        'auth.user',
-        on_delete=models.CASCADE,
-        null=True
-    )
+    checked = models.BooleanField(default=False)
+    created_at = models.DateField('日付', auto_now_add=True)
 
     def __str__(self):
         return self.text

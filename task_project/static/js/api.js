@@ -9,31 +9,35 @@ const requestHeader = {
 /*
   APIリクエスト処理
 
-  リクエストは、GET,POST,DELETE
-  アクセスするAPIはTaskItem, TaskItemDone
+  リクエストは、GET,POST,DELETE, PUT
+  アクセスするAPIはTaskItem
 */
 var vm = new Vue({
   el: '#tasklist',
   delimiters: ['${', '}'],
   data: {
     itemApiUrl: '/api/taskitem/',
-    doneItemApiUrl: '/api/taskitemdone/',
     items: [],
-    doneItems: [],
-    currentItem: {},
+    checkedItems: [],
     newItem: {'text': null},
-    newDoneItem: {'text': null},
   },
   mounted: function() {
     this.getItems();
-    this.getDoneItems();
   },
   methods: {
     getItems: function() {
+      this.items = [];
+      this.checkedItems = [];
       axios
         .get(this.itemApiUrl)
         .then((response) => {
-          this.items = response.data;
+          for(var item in response.data) {
+            if(response.data[item].checked === false) {
+              this.items.push(response.data[item]);
+            }else {
+              this.checkedItems.push(response.data[item]);
+            }
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -51,10 +55,6 @@ var vm = new Vue({
           console.log(err);
         })
     },
-    addNewItem: function(task_text) {
-      this.newItem.text = task_text;
-      this.addItem();
-    },
     deleteItem: function(task_id) {
       axios
         .delete(this.itemApiUrl + task_id, requestHeader)
@@ -65,44 +65,21 @@ var vm = new Vue({
           console.log(err);
         })
     },
-    getDoneItems: function() {
-      axios
-        .get(this.doneItemApiUrl)
-        .then((response) => {
-          this.doneItems = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    },
-    addDoneItem: function(task_text) {
-      this.newDoneItem.text = task_text;
-      axios
-        .post(this.doneItemApiUrl, this.newDoneItem, requestHeader)
-        .then((response) => {
-          this.getDoneItems();
-          this.newDoneItem.text = null;
-        })
-        .catch((err) => {
-          this.newDoneItem.text = null;
-          console.log(err);
-        })
-    },
-    deleteDoneItem: function(done_task_id) {
-      axios
-        .delete(this.doneItemApiUrl + done_task_id, requestHeader)
-        .then((response) => {
-          this.getDoneItems();
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-    },
-    deleteAllDoneItem: function() {
-      for(var i = 0; i < this.doneItems.length; i++) {
-        this.deleteDoneItem(this.doneItems[i].task_id);
+    deleteAllItem: function() {
+      for(var i = 0; i < this.checkedItems.length; i++) {
+        this.deleteItem(this.checkedItems[i].task_id);
       }
       $('#deleteAllModal').modal('hide');
     },
+    checkItem: function(taskItem, checked) {
+      axios
+        .patch(this.itemApiUrl + taskItem.task_id + '/', {'checked': checked}, requestHeader)
+        .then((response) => {
+          this.getItems();
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
   }
 });

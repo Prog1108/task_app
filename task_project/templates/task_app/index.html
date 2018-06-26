@@ -21,8 +21,8 @@
       <div class="list">
         <ul class="list-group" v-for="item in items">
           <li class="list-group-item">
-            <form v-on:submit.prevent="addDoneItem(item.text)">
-              <button class="btn btn-sm btn-outline-danger" v-on:click="deleteItem(item.task_id)">－</button>
+            <form v-on:submit.prevent="checkItem(item, true)">
+              <button class="btn btn-sm btn-outline-danger">－</button>
               ${ item.text }
             </form>
           </li>
@@ -36,11 +36,11 @@
       <button class="btn btn-danger" data-toggle="modal" data-target="#deleteAllModal">全て削除</button>
       </h3>
 
-      <ul class="list-group" v-for="doneItem in doneItems">
+      <ul class="list-group" v-for="checkedItem in checkedItems">
         <li class="list-group-item text-muted">
-          <form v-on:submit.prevent="addNewItem(doneItem.text)">
-            <button class="btn btn-sm btn-outline-primary" v-on:click="deleteDoneItem(doneItem.task_id)">＋</button>
-            ${ doneItem.text }
+          <form v-on:submit.prevent="checkItem(checkedItem, false)">
+            <button class="btn btn-sm btn-outline-primary">＋</button>
+            ${ checkedItem.text }
           </form>
         </li>
       </ul>
@@ -59,9 +59,9 @@
               <h4>本当に削除しますか？</h4>
             </div>
             <div class="modal-footer">
-              <form v-on:submit.prevent="deleteAllDoneItem()">
+              <form v-on:submit.prevent="deleteAllItem()">
                 <button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">やめる</button>
-                <button type="submit" class="btn btn-danger" id="deleteItemDone">削除</button>
+                <button type="submit" class="btn btn-danger" id="deleteItem">削除</button>
               </form>
             </div>
           </div>
