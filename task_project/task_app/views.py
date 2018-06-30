@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from rest_framework import viewsets
 
 from django.views import generic
-
 from task_app.models import TaskItem
 from task_app.serializers import TaskItemSerializer
 
@@ -16,8 +15,8 @@ class TaskItemViewSet(viewsets.ModelViewSet):
     serializer_class = TaskItemSerializer
 
     def get_queryset(self):
-        return TaskItem.objects.filter(author=self.request.user)
+        taskitems = TaskItem.objects.filter(author=self.request.user)
+        return taskitems.order_by('-created_at')
 
     def perform_create(self, serializer):
-        print('called from HTTP POST')
         return serializer.save(author=self.request.user)

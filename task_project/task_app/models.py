@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils import timezone
 
 
 class TaskItem(models.Model):
@@ -9,12 +10,16 @@ class TaskItem(models.Model):
         default=uuid.uuid4,
         editable=False
     )
-    text = models.CharField(max_length=50)
+    text = models.CharField(max_length=150)
     author = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
         null=True
     )
+    checked = models.BooleanField(default=False)
+    created_at = models.DateField(
+        default=timezone.now()
+    )
 
     def __str__(self):
-        return str(self.text)
+        return self.text

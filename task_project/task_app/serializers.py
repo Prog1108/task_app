@@ -6,4 +6,4 @@ from task_app.models import TaskItem
 class TaskItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskItem
-        fields = ('task_id', 'text', 'author')
+        fields = ('task_id', 'text', 'checked')
