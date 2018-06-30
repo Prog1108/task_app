@@ -17,9 +17,13 @@ class TaskItem(models.Model):
         null=True
     )
     checked = models.BooleanField(default=False)
+<<<<<<< HEAD
     created_at = models.DateField(
         default=timezone.now()
     )
+=======
+    created_at = models.DateField('日付', auto_now_add=True)
+>>>>>>> 39c0a65174372f665f878c94b6723fed117b5963
 
     def __str__(self):
         return self.text
