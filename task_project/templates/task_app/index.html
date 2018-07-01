@@ -9,6 +9,8 @@
       <form v-on:submit.prevent="addItem()">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="タスクを入力" v-model="newItem.text" required="required">
+          <input type="submit" class="btn btn-primary" :disabled="loading" required="required">
+          <span class="text-danger" v-if="errMsg">既に登録されています</span>
         </div>
       </form>
     </div>
@@ -20,9 +22,9 @@
       <h3 class="text-secondary">未完了</h3>
       <div class="list">
         <ul class="list-group" v-for="item in items">
-          <li class="list-group-item">
-            <form v-on:submit.prevent="checkItem(item, true)">
-              <button class="btn btn-sm btn-outline-danger">－</button>
+          <li class="list-group-item" v-if="item.checked === false">
+            <form  v-on:submit.prevent="checkItem(item, true)">
+              <button class="btn btn-sm btn-outline-danger" :disabled="loading">－</button>
               ${ item.text }
             </form>
           </li>
@@ -32,43 +34,24 @@
 
     <!-- task done -->
     <div class="col-xs-12 col-md-6 col-lg-6">
-      <h3 class="text-muted">完了済み
-      <button class="btn btn-danger" data-toggle="modal" data-target="#deleteAllModal">全て削除</button>
-      </h3>
+      <h3 class="text-muted">完了済み</h3>
 
-      <ul class="list-group" v-for="checkedItem in checkedItems">
-        <li class="list-group-item text-muted">
-          <form v-on:submit.prevent="checkItem(checkedItem, false)">
-            <button class="btn btn-sm btn-outline-primary">＋</button>
-            ${ checkedItem.text }
+      <ul class="list-inline" v-for="item in items">
+        <li class="list-inline-item text-muted" v-if="item.checked === true">
+          <form v-on:submit.prevent="checkItem(item, false)">
+            <button class="btn btn-sm btn-outline-primary" :disabled="loading">＋</button>
+            ${ item.text }
+          </form>
+        </li>
+        <li class="list-inline-item"  v-if="item.checked === true">
+          <form v-on:submit.prevent="deleteItem(item.task_id)">
+            <button class="btn btn-sm btn-danger" :disabled="loading">削除</button>
           </form>
         </li>
       </ul>
-
-      <!-- Delete All Modal -->
-      <div class="modal fade" id="deleteAllModal" role="dialog" tabindex="-1" aria-labelledby="modalLognTitle" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title text-danger" id="ModalLongTitle">注意</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <h4>本当に削除しますか？</h4>
-            </div>
-            <div class="modal-footer">
-              <form v-on:submit.prevent="deleteAllItem()">
-                <button type="button" class="btn btn-secondary" id="closeButton" data-dismiss="modal">やめる</button>
-                <button type="submit" class="btn btn-danger" id="deleteItem">削除</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
+  <div class="loading" v-if="loading === true">Loading&#8230;</div>
 
 </div>
 

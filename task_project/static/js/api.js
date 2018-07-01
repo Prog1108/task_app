@@ -9,7 +9,7 @@ const requestHeader = {
 /*
   APIリクエスト処理
 
-  リクエストは、GET,POST,DELETE, PUT
+  リクエストは、GET,POST,DELETE, PATCH
   アクセスするAPIはTaskItem
 */
 var vm = new Vue({
@@ -18,68 +18,76 @@ var vm = new Vue({
   data: {
     itemApiUrl: '/api/taskitem/',
     items: [],
-    checkedItems: [],
     newItem: {'text': null},
+    loading: false,
+    errMsg: false,
   },
   mounted: function() {
     this.getItems();
   },
   methods: {
     getItems: function() {
+      this.loading = true;
       axios
         .get(this.itemApiUrl)
         .then((response) => {
-          this.items.length = 0;
-          this.checkedItems.length = 0;
-          dataList = response.data;
-          for(var item in dataList) {
-            if(dataList[item].checked === false) {
-              this.items.push(dataList[item]);
-            }else {
-              this.checkedItems.push(dataList[item]);
-            }
-          }
+          this.items = response.data;
+          this.loading = false;
+          this.errMsg = false;
         })
         .catch((err) => {
           console.log(err);
+          this.loading = false;
+          this.errMsg = false;
         })
     },
     addItem: function() {
+      this.loading = true;
+      for(var i = 0; i < this.items.length; i++) {
+        if(this.newItem.text === this.items[i].text) {
+          this.newItem.text = null;
+          this.loading = false;
+          this.errMsg = true;
+          return false;
+        }
+      }
       axios
         .post(this.itemApiUrl, this.newItem, requestHeader)
         .then((response) => {
           this.getItems();
           this.newItem.text = null;
+          this.loading = false;
         })
         .catch((err) => {
           this.newItem.text = null;
           console.log(err);
+          this.loading = false;
         })
     },
     deleteItem: function(task_id) {
+      this.loading = true;
       axios
-        .delete(this.itemApiUrl + task_id, requestHeader)
+        .delete(this.itemApiUrl + task_id + '/', requestHeader)
         .then((response) => {
           this.getItems();
+          this.loading = false;
         })
         .catch((err) => {
           console.log(err);
+          this.loading = false;
         })
     },
-    deleteAllItem: function() {
-      for(var i = 0; i < this.checkedItems.length; i++) {
-        this.deleteItem(this.checkedItems[i].task_id);
-      }
-      $('#deleteAllModal').modal('hide');
-    },
     checkItem: function(taskItem, checked) {
+      this.loading = true;
       axios
         .patch(this.itemApiUrl + taskItem.task_id + '/', {'checked': checked}, requestHeader)
         .then((response) => {
           this.getItems();
+          this.loading = false;
         })
         .catch((err) => {
           console.log(err);
+          this.loading = false;
         })
     }
   }
